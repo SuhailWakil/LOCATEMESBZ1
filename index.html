@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Geolocation Display</title>
+</head>
+<body>
+<h1>Received Geolocation Data</h1>
+<p>Latitude: <span id="latitude">N/A</span></p>
+<p>Longitude: <span id="longitude">N/A</span></p>
+
+<script>
+    // Create a WebSocket connection to the server
+    const socket = new WebSocket('ws://localhost:3000'); // Replace with your server URL
+
+    // Handle messages from the server
+    socket.addEventListener('message', (event) => {
+        const data = JSON.parse(event.data);
+        if (data.latitude && data.longitude) {
+            document.getElementById('latitude').textContent = data.latitude;
+            document.getElementById('longitude').textContent = data.longitude;
+        }
+    });
+
+    // Handle connection open event
+    socket.addEventListener('open', () => {
+        console.log('Connected to WebSocket');
+    });
+
+    // Handle connection close event
+    socket.addEventListener('close', () => {
+        console.log('Disconnected from WebSocket');
+    });
+</script>
+</body>
+</html>
