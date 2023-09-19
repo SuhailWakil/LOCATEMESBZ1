@@ -7,14 +7,14 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 // Serve your static files (e.g., HTML, CSS, JS) here if needed
-// app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/'));
 
 io.on('connection', (socket) => {
     console.log('A user connected');
 
     socket.on('coordinates', (data) => {
         console.log('Received coordinates:', data);
-
+        socket.emit('coordinates', data);
         // Here, you can process and use the received coordinates as needed.
         // For this example, we're just displaying them in the console.
     });
@@ -30,5 +30,5 @@ server.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
-    res.send('Hello, World!');
+    res.send('Hello, World!!!');
 });

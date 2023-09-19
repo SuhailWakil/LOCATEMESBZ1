@@ -7,6 +7,8 @@
 </head>
 <body>
 <h1>Received Geolocation Data</h1>
+<p>X: <span id="x">N/A</span></p>
+<p>Y: <span id="y">N/A</span></p>
 <p>Latitude: <span id="latitude">N/A</span></p>
 <p>Longitude: <span id="longitude">N/A</span></p>
 
@@ -14,13 +16,23 @@
     // Create a WebSocket connection to the server
     const socket = new WebSocket('ws://localhost:3000'); // Replace with your server URL
 
+    // Function to update the display with received data
+    function updateDisplay(data) {
+        if (data.x !== undefined && data.y !== undefined) {
+            document.getElementById('x').textContent = data.x;
+            document.getElementById('y').textContent = data.y;
+        }
+
+        if (data.geolocation && data.geolocation.latitude !== undefined && data.geolocation.longitude !== undefined) {
+            document.getElementById('latitude').textContent = data.geolocation.latitude;
+            document.getElementById('longitude').textContent = data.geolocation.longitude;
+        }
+    }
+
     // Handle messages from the server
     socket.addEventListener('message', (event) => {
         const data = JSON.parse(event.data);
-        if (data.latitude && data.longitude) {
-            document.getElementById('latitude').textContent = data.latitude;
-            document.getElementById('longitude').textContent = data.longitude;
-        }
+        updateDisplay(data);
     });
 
     // Handle connection open event
