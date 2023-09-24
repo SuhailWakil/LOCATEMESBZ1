@@ -36,6 +36,7 @@
 <script>
     let map; // Declare the map variable globally
     let marker; // Declare the marker variable globally
+    let markerTimeout; // Declare a variable to store the timer
 
     // Initialize the map
     function initMap() {
@@ -52,6 +53,7 @@
             marker.setMap(null);
         }
 
+        // Create a new marker
         marker = new google.maps.Marker({
             position: { lat, lng },
             map,
@@ -60,6 +62,20 @@
 
         // Center the map on the new coordinates
         map.setCenter({ lat, lng });
+
+        // Set a timer to remove the marker after 5 seconds
+        clearTimeout(markerTimeout);
+        markerTimeout = setTimeout(() => {
+            removeMarker();
+        }, 5000); // 5000 milliseconds (5 seconds)
+    }
+
+    // Function to remove the marker from the map
+    function removeMarker() {
+        if (marker) {
+            marker.setMap(null);
+            marker = null;
+        }
     }
 
     // Connect to the WebSocket server
