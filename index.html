@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coordinates on Google Maps</title>
+    <title>My Location</title>
     <!-- Include the Google Maps JavaScript API -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBuwm4EzrxD4Yn39AIDuqPtvTAh-qLhLA"></script>
     <style>
-        /* Style the map container to be full screen */
+        /* Style the map container */
         #map {
             height: 100vh; /* Set the height to 100% of the viewport height */
             width: 100%;
@@ -25,6 +25,12 @@
     </style>
 </head>
 <body>
+
+<!-- Display the map -->
+<div id="map"></div>
+<p>X: <span id="x">N/A</span></p>
+<p>Y: <span id="y">N/A</span></p>
+
 <!-- JavaScript code to initialize the map and markers -->
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -74,11 +80,5 @@
     // Load the map when the page is ready
     google.maps.event.addDomListener(window, 'load', initMap);
 </script>
-
-<!-- Display the map -->
-<div id="map"></div>
-<div class="info-panel">
-    <h1>My Location</h1>
-</div>
 </body>
 </html>
