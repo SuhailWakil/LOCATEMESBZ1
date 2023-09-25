@@ -43,6 +43,7 @@
         map = new google.maps.Map(document.getElementById("map"), {
             center: { lat: 32.7157, lng: -117.1611 }, // Default center coordinates (San Diego)
             zoom: 14, // Default zoom level
+            mapTypeId: 'roadmap'
         });
     }
 
@@ -58,6 +59,10 @@
             position: { lat, lng },
             map,
             title: `Coordinates: ${lat}, ${lng}`,
+            icon: {
+                url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png', // Replace with the URL of your custom marker icon
+                scaledSize: new google.maps.Size(40, 40), // Customize the size of the marker
+            }
         });
 
         // Center the map on the new coordinates
@@ -67,7 +72,7 @@
         clearTimeout(markerTimeout);
         markerTimeout = setTimeout(() => {
             removeMarker();
-        }, 5000); // 5000 milliseconds (5 seconds)
+        }, 10000); // 10000 milliseconds (10 seconds)
     }
 
     // Function to remove the marker from the map
