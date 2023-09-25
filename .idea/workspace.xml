@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2746adf9-c1fc-49a7-82b0-715bc1bbaa91" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-    </list>
+    <list default="true" id="2746adf9-c1fc-49a7-82b0-715bc1bbaa91" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,6 +31,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="show.migrate.to.gradle.popup" value="false" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -54,7 +52,9 @@
       <workItem from="1695568488698" duration="1541000" />
       <workItem from="1695616203377" duration="223000" />
       <workItem from="1695616438755" duration="382000" />
-      <workItem from="1695616837993" duration="549000" />
+      <workItem from="1695616837993" duration="953000" />
+      <workItem from="1695657422661" duration="112000" />
+      <workItem from="1695673072397" duration="12000" />
     </task>
     <servers />
   </component>
