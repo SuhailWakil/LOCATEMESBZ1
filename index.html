@@ -28,8 +28,6 @@
 
 <!-- Display the map -->
 <div id="map"></div>
-<p>X: <span id="x">N/A</span></p>
-<p>Y: <span id="y">N/A</span></p>
 
 <!-- JavaScript code to initialize the map and markers -->
 <script src="/socket.io/socket.io.js"></script>
@@ -42,8 +40,7 @@
     function initMap() {
         map = new google.maps.Map(document.getElementById("map"), {
             center: { lat: 32.7157, lng: -117.1611 }, // Default center coordinates (San Diego)
-            zoom: 14, // Default zoom level
-            mapTypeId: 'roadmap'
+            zoom: 12
         });
     }
 
@@ -89,8 +86,6 @@
     // Listen for coordinates updates from the server
     socket.on('coordinates', (data) => {
         // Update the HTML elements with the received data
-        document.getElementById('x').textContent = data.x || 'N/A';
-        document.getElementById('y').textContent = data.y || 'N/A';
 
         // Add a marker on the map using received coordinates
         if (data.geolocation && data.geolocation.latitude && data.geolocation.longitude) {
