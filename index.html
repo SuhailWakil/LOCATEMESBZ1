@@ -3,31 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Location</title>
+    <title>Meal Prep on Demand</title>
     <!-- Include the Google Maps JavaScript API -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBuwm4EzrxD4Yn39AIDuqPtvTAh-qLhLA"></script>
     <style>
+        /* Reset the margin and padding for the entire page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Common styles for both mobile and desktop */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Style the header */
+        header {
+            background-color: #333; /* Background color for the header */
+            color: #fff; /* Text color for the header */
+            padding: 20px; /* Padding for the header */
+            text-align: center; /* Center-align the header text */
+        }
+
+        /* Style the containers */
+        #map-container,
+        #text-templates {
+            width: 100%; /* Both containers take up 100% of the available width */
+        }
+
         /* Style the map container */
+        #map-container {
+            height: 50vh;
+            position: relative;
+        }
+
+        /* Style the map */
         #map {
-            height: 100vh; /* Set the height to 100% of the viewport height */
-            width: 100%;
+            height: 100%; /* Set the height of the map to 100% of the map container height */
+            width: 100%; /* Set the width of the map to 100% of the map container width */
+        }
+
+        /* Style the text templates container */
+        #text-templates {
+            background-color: #f0f0f0;
+            padding: 20px;
         }
 
         /* Style for the info panel */
         .info-panel {
-            position: absolute;
-            top: 10px;
-            left: 10px;
+            height: 5vh;
             background-color: white;
             padding: 10px;
             border: 1px solid #ccc;
+            margin-bottom: 10px;
+            margin-right: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Style for the template data boxes */
+        .template-box {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 6px;
+            margin: 6px 0;
+        }
+
+        /* Media query for screens smaller than 768px (typical iPhone screen width) */
+        @media (max-width: 768px) {
+            /* Adjust the map and text templates for smaller screens */
+            #map-container {
+                height: 50vh;
+            }
+
+            #text-templates {
+                padding: 10px;
+            }
+
+            /* Center text in info panels on smaller screens */
+            .info-panel {
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- Display the map -->
-<div id="map"></div>
+<!-- Header -->
+<header>
+    <h1>Meal Prep on Demand</h1>
+</header>
+
+<!-- Map container -->
+<div id="map-container">
+    <!-- Display the map -->
+    <div id="map"></div>
+</div>
+
+<!-- Text templates container -->
+<div id="text-templates">
+    <!-- Check if data is available, otherwise display "Offline" -->
+    <div class="info-panel" id="data-panel">
+        <p id="data-message">We are currently serving..</p>
+    </div>
+    <!-- Template data boxes -->
+    <div class="template-box">
+        <h3>Meal 1 - Blorpy flibberflop zibberjibber gibberish</h3>
+    </div>
+    <div class="template-box">
+        <h3>Meal 2 - Blorpy flibberflop zibberjibber gibberish</h3>
+    </div>
+    <div class="template-box">
+        <h3>Meal 3 - Blorpy flibberflop zibberjibber gibberish</h3>
+    </div>
+    <div class="template-box">
+        <h3>Meal 4 - Blorpy flibberflop zibberjibber gibberish</h3>
+    </div>
+
+</div>
 
 <!-- JavaScript code to initialize the map and markers -->
 <script src="/socket.io/socket.io.js"></script>
@@ -40,7 +134,7 @@
     function initMap() {
         map = new google.maps.Map(document.getElementById("map"), {
             center: { lat: 32.7157, lng: -117.1611 }, // Default center coordinates (San Diego)
-            zoom: 21
+            zoom: 19
         });
     }
 
@@ -69,7 +163,11 @@
         clearTimeout(markerTimeout);
         markerTimeout = setTimeout(() => {
             removeMarker();
+            displayOfflineMessage();
         }, 10000); // 10000 milliseconds (10 seconds)
+
+        // Update the data panel with "Online" message
+        document.getElementById("data-message").textContent = "We are currently serving..";
     }
 
     // Function to remove the marker from the map
@@ -80,21 +178,30 @@
         }
     }
 
+    // Function to display "Offline" message
+    function displayOfflineMessage() {
+        document.getElementById("data-message").textContent = "Sorry! We are currently not serving..";
+    }
+
     // Connect to the WebSocket server
     const socket = io();
 
     // Listen for coordinates updates from the server
     socket.on('coordinates', (data) => {
-        // Update the HTML elements with the received data
-
-        // Add a marker on the map using received coordinates
+        // Check if data is available
         if (data.geolocation && data.geolocation.latitude && data.geolocation.longitude) {
             addMarker(data.geolocation.latitude, data.geolocation.longitude);
+        } else {
+            // No data available, display "Offline" message
+            displayOfflineMessage();
         }
     });
 
     // Load the map when the page is ready
     google.maps.event.addDomListener(window, 'load', initMap);
+
+    // Update the initial "Offline" message
+    displayOfflineMessage();
 </script>
 </body>
 </html>
