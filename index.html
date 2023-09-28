@@ -14,76 +14,81 @@
             box-sizing: border-box;
         }
 
-        /* Common styles for both mobile and desktop */
+        /* Set a background color for the entire page */
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         /* Style the header */
         header {
-            background-color: #333; /* Background color for the header */
-            color: #fff; /* Text color for the header */
-            padding: 20px; /* Padding for the header */
-            text-align: center; /* Center-align the header text */
+            background-color: #4267B2; /* Facebook blue */
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
         }
 
-        /* Style the containers */
-        #map-container,
-        #text-templates {
-            width: 100%; /* Both containers take up 100% of the available width */
+        /* Style the main content container */
+        #content {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         /* Style the map container */
         #map-container {
-            height: 50vh;
-            position: relative;
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         /* Style the map */
         #map {
-            height: 100%; /* Set the height of the map to 100% of the map container height */
-            width: 100%; /* Set the width of the map to 100% of the map container width */
+            width: 100%;
+            height: 100%;
         }
 
-        /* Style the text templates container */
-        #text-templates {
-            background-color: #f0f0f0;
-            padding: 20px;
-        }
-
-        /* Style for the info panel */
+        /* Style the info panel */
         .info-panel {
-            height: 5vh;
-            background-color: white;
-            padding: 10px;
+            background-color: #f0f0f0;
             border: 1px solid #ccc;
-            margin-bottom: 10px;
-            margin-right: 10px;
-            box-sizing: border-box;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: center;
         }
 
-        /* Style for the template data boxes */
+        /* Style the template data boxes */
         .template-box {
             background-color: #fff;
             border: 1px solid #ccc;
-            padding: 6px;
-            margin: 6px 0;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 8px;
+            width: 100%;
         }
 
         /* Media query for screens smaller than 768px (typical iPhone screen width) */
         @media (max-width: 768px) {
             /* Adjust the map and text templates for smaller screens */
             #map-container {
-                height: 50vh;
-            }
-
-            #text-templates {
-                padding: 10px;
-            }
-
-            /* Center text in info panels on smaller screens */
-            .info-panel {
-                text-align: center;
+                height: 300px;
             }
         }
     </style>
@@ -95,34 +100,34 @@
     <h1>Meal Prep on Demand</h1>
 </header>
 
-<!-- Map container -->
-<div id="map-container">
-    <!-- Display the map -->
-    <div id="map"></div>
-</div>
-
-<!-- Text templates container -->
-<div id="text-templates">
-    <!-- Check if data is available, otherwise display "Offline" -->
-    <div class="info-panel" id="data-panel">
-        <p id="data-message">We are currently serving..</p>
+<!-- Main content container -->
+<div id="content">
+    <!-- Map container -->
+    <div id="map-container">
+        <!-- Display the map -->
+        <div id="map"></div>
     </div>
+
     <!-- Template data boxes -->
     <div class="template-box">
-        <h3>Meal 1 - Blorpy flibberflop zibberjibber gibberish</h3>
+        <h3>Meal 1 - Delicious Dish</h3>
+        <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
     </div>
     <div class="template-box">
-        <h3>Meal 2 - Blorpy flibberflop zibberjibber gibberish</h3>
+        <h3>Meal 2 - Tasty Treat</h3>
+        <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
     </div>
     <div class="template-box">
-        <h3>Meal 3 - Blorpy flibberflop zibberjibber gibberish</h3>
+        <h3>Meal 3 - Savory Supper</h3>
+        <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
     </div>
     <div class="template-box">
-        <h3>Meal 4 - Blorpy flibberflop zibberjibber gibberish</h3>
+        <h3>Meal 4 - Gourmet Delight</h3>
+        <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
     </div>
-
 </div>
 
+<!-- JavaScript code to initialize the map and markers -->
 <!-- JavaScript code to initialize the map and markers -->
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -203,5 +208,6 @@
     // Update the initial "Offline" message
     displayOfflineMessage();
 </script>
+
 </body>
 </html>
