@@ -60,7 +60,12 @@
             border-radius: 8px;
             overflow: hidden;
         }
-
+        #data-container {
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
         /* Style the map */
         #map {
             width: 100%;
@@ -112,26 +117,12 @@
         <div id="map"></div>
     </div>
 
-    <!-- Template data boxes -->
-    <div class="template-box">
-        <h3>Meal 1 - Delicious Dish</h3>
-        <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    </div>
-    <div class="template-box">
-        <h3>Meal 2 - Tasty Treat</h3>
-        <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    </div>
-    <div class="template-box">
-        <h3>Meal 3 - Savory Supper</h3>
-        <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    </div>
-    <div class="template-box">
-        <h3>Meal 4 - Gourmet Delight</h3>
-        <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <!-- Template data container -->
+    <div id="data-container">
+        <!-- Content will be dynamically updated here -->
     </div>
 </div>
 
-<!-- JavaScript code to initialize the map and markers -->
 <!-- JavaScript code to initialize the map and markers -->
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -212,6 +203,43 @@
     // Update the initial "Offline" message
     displayOfflineMessage();
 </script>
+<script>
+    // Function to fetch data from the API and refresh the content
+    async function fetchDataAndRefresh() {
+        try {
+            const response = await fetch('http://sbzlocation.azurewebsites.net/data');
+            //const response = await fetch('http://localhost:3002/api/data');
+            const data = await response.json();
+            const dataContainer = document.getElementById('data-container');
+
+            // Clear existing content
+            dataContainer.innerHTML = '';
+
+            // Loop through the data and populate the template boxes
+            data.forEach(item => {
+                const templateBox = document.createElement('div');
+                templateBox.className = 'template-box';
+                templateBox.innerHTML = `
+                    <h3>${item.ItemShortDesc}</h3>
+                    <p>${item.ItemLongDesc}</p>
+                    <p>Price: $${item.Price}</p>
+                    <p>Qty: ${item.Quantity}</p>
+                `;
+
+                dataContainer.appendChild(templateBox);
+            });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    // Call the fetchDataAndRefresh function initially
+    fetchDataAndRefresh();
+
+    // Periodically fetch and refresh data every 5 seconds (adjust the interval as needed)
+    setInterval(fetchDataAndRefresh, 5000); // 5000 milliseconds (5 seconds)
+</script>
+
 
 </body>
 </html>
