@@ -7,9 +7,6 @@ yarn-error.log
 logs
 *.log
 
-# Environment variables
-.env
-
 # macOS specific files
 .DS_Store
 
@@ -20,11 +17,6 @@ logs
 .idea/
 *.iml
 *.iws
-
-# Build files
-build/
-dist/
-*.exe
 
 # IDE specific files
 *.sublime-project
