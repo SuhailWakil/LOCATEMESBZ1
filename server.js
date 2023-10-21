@@ -69,8 +69,6 @@ app.get('/api/data', async (req, res) => {
         sql.close();
     }
 });
-
-
 app.get('/api/ownerdata', async (req, res) => {
     try {
         // Connect to the database
