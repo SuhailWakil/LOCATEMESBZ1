@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2746adf9-c1fc-49a7-82b0-715bc1bbaa91" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/main_sbzlocation.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
