@@ -69,7 +69,24 @@ app.get('/api/data', async (req, res) => {
         sql.close();
     }
 });
+app.get('/api/ownerdata', async (req, res) => {
+    try {
+        // Connect to the database
+        await sql.connect(config);
 
+        // Query the database (replace this with your SQL query)
+        const result = await sql.query("SELECT * FROM dbo.SBZ_MENU");
+
+        // Send the query result as JSON
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred' });
+    } finally {
+        // Close the database connection
+        sql.close();
+    }
+});
 // Define a new POST endpoint to update the SBZ_MENU table
 app.post('/api/update-menu', async (req, res) => {
     try {
