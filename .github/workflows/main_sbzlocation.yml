@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'SBZLOCATION'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F1507AAD93B843A68FFB90BA57486F95 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C018A62DE2474E978770B8641F424BD3 }}
           package: .
