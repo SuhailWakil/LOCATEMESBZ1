@@ -1,2 +1,39 @@
-# Node dependencies
 node_modules/
+# Dependency directories
+npm-debug.log
+yarn-error.log
+
+# Logs
+logs
+*.log
+
+# Environment variables
+.env
+
+# macOS specific files
+.DS_Store
+
+# Visual Studio Code specific files
+.vscode/
+
+# JetBrains IDEs specific files
+.idea/
+*.iml
+*.iws
+
+# Build files
+build/
+dist/
+*.exe
+
+# IDE specific files
+*.sublime-project
+*.sublime-workspace
+*.idea
+*.iml
+*.ipr
+
+# Operating System files
+Thumbs.db
+ehthumbs.db
+Icon?
