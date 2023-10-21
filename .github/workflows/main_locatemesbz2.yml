@@ -58,5 +58,5 @@ jobs:
         with:
           app-name: 'LOCATEMESBZ2'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9EC35F3B57FE4EBABAD92F136344A766 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D7B20045935D40C297BD087BE3A5171B }}
           package: .
