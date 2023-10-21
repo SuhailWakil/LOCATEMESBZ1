@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2746adf9-c1fc-49a7-82b0-715bc1bbaa91" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/main_locatemesbz.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/main_locatemesbz1.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/main_locatemesbz2.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.github/workflows/main_mobilefoodservice.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/main_mobilefoodservice.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/main_sbzlocation.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -10,6 +10,15 @@ on:
   workflow_dispatch:
 
 jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Clean up old artifacts'
+        uses: actions/delete-artifact@v2
+        with:
+          name: node-app
+
   build:
     runs-on: windows-latest
 
