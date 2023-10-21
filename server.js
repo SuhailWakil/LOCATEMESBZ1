@@ -110,9 +110,8 @@ app.post('/api/insert-menu', async (req, res) => {
 
         // Define the insert query
         const query = `
-            INSERT INTO dbo.SBZ_MENU ([ItemID], [ItemShortDesc], [ItemLongDesc], [Status], [Price], [Quantity])
+            INSERT INTO dbo.SBZ_MENU ([ItemShortDesc], [ItemLongDesc], [Status], [Price], [Quantity])
             VALUES (
-                '${req.body.ItemID}',
                 '${req.body.ItemShortDesc}',
                 '${req.body.ItemLongDesc}',
                 '${req.body.Status}',
