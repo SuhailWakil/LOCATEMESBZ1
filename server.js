@@ -76,7 +76,7 @@ app.get('/api/ownerdata', async (req, res) => {
         await sql.connect(config);
 
         // Query the database (replace this with your SQL query)
-        const result = await sql.query("SELECT * FROM dbo.SBZ_MENU");
+        const result = await sql.query("SELECT ItemID, ItemShortDesc, ItemLongDesc, Status, Price, Quantity FROM dbo.SBZ_MENU");
 
         // Send the query result as JSON
         res.json(result.recordset);
