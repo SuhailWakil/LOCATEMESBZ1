@@ -1,4 +1,4 @@
-
+const sharp = require('sharp');
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -295,6 +295,49 @@ app.get('/api/get-address/:addressId?', async (req, res) => {
     } catch (err) {
         console.error('Error:', err);
         res.status(500).json({ error: 'An error occurred while fetching the address' });
+    } finally {
+        sql.close();
+    }
+});
+app.get('/api/get-thumbnail/:itemId', async (req, res) => {
+    try {
+        await sql.connect(config);
+
+        const itemId = req.params.itemId;
+        const query = `
+            SELECT Image
+            FROM dbo.SBZ_MENU
+            WHERE ItemID = @itemId
+        `;
+
+        const request = new sql.Request();
+        request.input('itemId', sql.Int, itemId);
+        const result = await request.query(query);
+
+        if (result.recordset.length > 0 && result.recordset[0].Image) {
+            const imageBuffer = result.recordset[0].Image;
+
+            // Resize the image to thumbnail size using sharp
+            sharp(imageBuffer)
+                .resize({ width: 100 }) // Set the desired thumbnail width, height will auto scale
+                .toBuffer()
+                .then(data => {
+                    res.writeHead(200, {
+                        'Content-Type': 'image/jpeg',
+                        'Content-Length': data.length
+                    });
+                    res.end(data);
+                })
+                .catch(err => {
+                    console.error('Error processing image:', err);
+                    res.status(500).send('Error processing image');
+                });
+        } else {
+            res.status(404).send('Image not found');
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred while fetching the image' });
     } finally {
         sql.close();
     }
