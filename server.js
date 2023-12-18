@@ -215,7 +215,6 @@ app.post('/api/saveDefaultAddress', async (req, res) => {
     }
 });
 
-
 app.post('/api/upload-image', upload.single('image'), async (req, res) => {
     try {
         await sql.connect(config);
@@ -238,6 +237,64 @@ app.post('/api/upload-image', upload.single('image'), async (req, res) => {
     } catch (err) {
         console.error('Error:', err);
         res.status(500).json({ error: 'An error occurred while uploading the image' });
+    } finally {
+        sql.close();
+    }
+});
+app.get('/api/get-image/:itemId', async (req, res) => {
+    try {
+        await sql.connect(config);
+
+        const itemId = req.params.itemId;
+        const query = `
+            SELECT Image
+            FROM dbo.SBZ_MENU
+            WHERE ItemID = @itemId
+        `;
+
+        const request = new sql.Request();
+        request.input('itemId', sql.Int, itemId);
+        const result = await request.query(query);
+
+        if (result.recordset.length > 0 && result.recordset[0].Image) {
+            const imageBuffer = result.recordset[0].Image;
+            res.writeHead(200, {
+                'Content-Type': 'image/jpeg', // or the appropriate content type
+                'Content-Length': imageBuffer.length
+            });
+            res.end(imageBuffer); // Send the binary data of the image
+        } else {
+            res.status(404).send('Image not found');
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred while fetching the image' });
+    } finally {
+        sql.close();
+    }
+});
+app.get('/api/get-address/:addressId?', async (req, res) => {
+    try {
+        await sql.connect(config);
+
+        let query;
+        if (req.params.addressId) {
+            // Fetch address by specific ID
+            const addressId = req.params.addressId;
+            query = `SELECT * FROM dbo.SBZ_ADDRESS WHERE AddressID = @addressId`;
+            const request = new sql.Request();
+            request.input('addressId', sql.Int, addressId);
+            const result = await request.query(query);
+            res.json(result.recordset);
+        } else {
+            // Fetch all addresses
+            query = `SELECT * FROM dbo.SBZ_ADDRESS`;
+            const result = await sql.query(query);
+            res.json(result.recordset);
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred while fetching the address' });
     } finally {
         sql.close();
     }
