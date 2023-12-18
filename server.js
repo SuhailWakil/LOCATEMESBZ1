@@ -3,11 +3,16 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const sql = require('mssql');
-const bodyParser = require('body-parser'); // Add body-parser
+const bodyParser = require('body-parser');
+const multer = require('multer'); // Import multer for file uploads
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
+
+// Set up multer for handling file uploads
+const storage = multer.memoryStorage(); // Storing files in memory
+const upload = multer({ storage: storage });
 
 // Add body-parser middleware before defining routes
 app.use(bodyParser.json());
@@ -19,8 +24,6 @@ io.on('connection', (socket) => {
 
     socket.on('coordinates', (data) => {
         console.log('Received coordinates:', data);
-
-        // Emit the coordinates data to all connected clients
         io.emit('coordinates', data);
     });
 
@@ -34,20 +37,17 @@ server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 
-// Create a route to render the HTML page with the received data
 app.get('/index', (req, res) => {
-    // You can provide additional data here if needed
     res.sendFile(__dirname + '/index.html');
 });
 
-// Define your Azure SQL Database connection configuration
 const config = {
     user: 'swakil',
     password: 'Sandiego!23',
     server: 'sbzsqlserver.database.windows.net',
     database: 'SBZDB5',
     options: {
-        encrypt: true, // Use SSL
+        encrypt: true,
     },
 };
 
@@ -175,6 +175,69 @@ app.post('/api/delete-menu', async (req, res) => {
         res.status(500).json({ error: 'An error occurred' });
     } finally {
         // Close the database connection
+        sql.close();
+    }
+});
+
+// Define a new POST endpoint to save or update the default address
+app.post('/api/saveDefaultAddress', async (req, res) => {
+    try {
+        await sql.connect(config);
+
+        const { address } = req.body;
+
+        // Check if there is an existing address record
+        const checkQuery = `SELECT COUNT(*) as count FROM dbo.SBZ_ADDRESS`;
+        const checkResult = await sql.query(checkQuery);
+
+        let query;
+        if (checkResult.recordset[0].count > 0) {
+            // If a record exists, update it
+            query = `
+                UPDATE dbo.SBZ_ADDRESS
+                SET ADDRESS = '${address}'
+            `;
+        } else {
+            // If no record exists, insert a new one
+            query = `
+                INSERT INTO dbo.SBZ_ADDRESS (ADDRESS) 
+                VALUES ('${address}')
+            `;
+        }
+
+        await sql.query(query);
+        res.json({ message: 'Address saved successfully' });
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred while saving the address' });
+    } finally {
+        sql.close();
+    }
+});
+
+app.post('/api/upload-image', upload.single('image'), async (req, res) => {
+    try {
+        await sql.connect(config);
+
+        const imageBuffer = req.file.buffer;
+        const itemId = req.body.itemId;
+
+        const query = `
+            UPDATE dbo.SBZ_MENU
+            SET Image = @image
+            WHERE ItemID = @itemId
+        `;
+
+        const request = new sql.Request();
+        request.input('image', sql.VarBinary(sql.MAX), imageBuffer);
+        request.input('itemId', sql.Int, itemId);
+        await request.query(query);
+
+        res.json({ message: 'Image uploaded successfully' });
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred while uploading the image' });
+    } finally {
         sql.close();
     }
 });
