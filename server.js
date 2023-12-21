@@ -342,3 +342,65 @@ app.get('/api/get-thumbnail/:itemId', async (req, res) => {
         sql.close();
     }
 });
+app.post('/api/save-location', async (req, res) => {
+    try {
+        await sql.connect(config);
+
+        const { id, latitude, longitude } = req.body;
+
+        let query;
+        if (id) {
+            // If an ID is provided, update the existing record
+            query = `
+                UPDATE dbo.SBZ_LOCATION
+                SET Latitude = @latitude, Longitude = @longitude
+                WHERE ID = @id
+            `;
+            const request = new sql.Request();
+            request.input('latitude', sql.Float, latitude);
+            request.input('longitude', sql.Float, longitude);
+            request.input('id', sql.Int, id);
+            await request.query(query);
+        } else {
+            // If no ID is provided, insert a new record
+            query = `
+                INSERT INTO dbo.SBZ_LOCATION (Latitude, Longitude)
+                VALUES (@latitude, @longitude)
+            `;
+            const request = new sql.Request();
+            request.input('latitude', sql.Float, latitude);
+            request.input('longitude', sql.Float, longitude);
+            await request.query(query);
+        }
+
+        res.json({ message: 'Location saved successfully' });
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred while saving the location' });
+    } finally {
+        sql.close();
+    }
+});
+app.get('/api/get-latest-location', async (req, res) => {
+    try {
+        await sql.connect(config);
+
+        // Fetch the latest (maximum ID) location
+        const query = `
+            SELECT TOP 1 * FROM dbo.SBZ_LOCATION
+            ORDER BY ID DESC
+        `;
+
+        const result = await sql.query(query);
+        if (result.recordset.length > 0) {
+            res.json(result.recordset[0]);
+        } else {
+            res.status(404).send('No location data found');
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred while fetching the latest location' });
+    } finally {
+        sql.close();
+    }
+});
