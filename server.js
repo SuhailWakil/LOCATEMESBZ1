@@ -345,7 +345,6 @@ app.get('/api/get-thumbnail/:itemId', async (req, res) => {
 app.post('/api/save-location', async (req, res) => {
     try {
         await sql.connect(config);
-
         const { latitude, longitude } = req.body;
 
         // Check if there's already a location record in the database
@@ -355,14 +354,12 @@ app.post('/api/save-location', async (req, res) => {
         let query;
 
         if (checkResult.recordset[0].count > 0) {
-            // If a record exists, update it
             query = `
                 UPDATE dbo.SBZ_LOCATION
                 SET Latitude = @latitude, Longitude = @longitude
-                WHERE ID = (SELECT MAX(ID) FROM dbo.SBZ_LOCATION)  // Update the latest (or the only) record
+                WHERE ID = (SELECT MAX(ID) FROM dbo.SBZ_LOCATION)
             `;
         } else {
-            // If no record exists, insert a new one
             query = `
                 INSERT INTO dbo.SBZ_LOCATION (Latitude, Longitude)
                 VALUES (@latitude, @longitude)
@@ -377,11 +374,12 @@ app.post('/api/save-location', async (req, res) => {
         res.json({ message: 'Location saved successfully' });
     } catch (err) {
         console.error('Error:', err);
-        res.status(500).json({ error: 'An error occurred while saving the location' });
+        res.status(500).json({ error: `An error occurred while saving the location: ${err.message}` });
     } finally {
         sql.close();
     }
 });
+
 
 app.get('/api/get-latest-location', async (req, res) => {
     try {
