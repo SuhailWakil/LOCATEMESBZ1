@@ -346,32 +346,33 @@ app.post('/api/save-location', async (req, res) => {
     try {
         await sql.connect(config);
 
-        const { id, latitude, longitude } = req.body;
+        const { latitude, longitude } = req.body;
+
+        // Check if there's already a location record in the database
+        const checkQuery = `SELECT COUNT(*) AS count FROM dbo.SBZ_LOCATION`;
+        const checkResult = await sql.query(checkQuery);
 
         let query;
-        if (id) {
-            // If an ID is provided, update the existing record
+
+        if (checkResult.recordset[0].count > 0) {
+            // If a record exists, update it
             query = `
                 UPDATE dbo.SBZ_LOCATION
                 SET Latitude = @latitude, Longitude = @longitude
-                WHERE ID = @id
+                WHERE ID = (SELECT MAX(ID) FROM dbo.SBZ_LOCATION)  // Update the latest (or the only) record
             `;
-            const request = new sql.Request();
-            request.input('latitude', sql.Float, latitude);
-            request.input('longitude', sql.Float, longitude);
-            request.input('id', sql.Int, id);
-            await request.query(query);
         } else {
-            // If no ID is provided, insert a new record
+            // If no record exists, insert a new one
             query = `
                 INSERT INTO dbo.SBZ_LOCATION (Latitude, Longitude)
                 VALUES (@latitude, @longitude)
             `;
-            const request = new sql.Request();
-            request.input('latitude', sql.Float, latitude);
-            request.input('longitude', sql.Float, longitude);
-            await request.query(query);
         }
+
+        const request = new sql.Request();
+        request.input('latitude', sql.Float, latitude);
+        request.input('longitude', sql.Float, longitude);
+        await request.query(query);
 
         res.json({ message: 'Location saved successfully' });
     } catch (err) {
@@ -381,6 +382,7 @@ app.post('/api/save-location', async (req, res) => {
         sql.close();
     }
 });
+
 app.get('/api/get-latest-location', async (req, res) => {
     try {
         await sql.connect(config);
